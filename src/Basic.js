@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+// import axios from 'axios';
 import './App.css';
+
 
 function App() {
 
@@ -10,10 +12,10 @@ function App() {
       <h1 data-test="counter-display">
         The counter is currently: <span data-test="count">{count}</span>
       </h1>
-      <button 
+      <button
         data-test="increment-button"
         onClick={() => setCount( count + 1)}
-      >Increment counter 
+      >Increment counter
       </button>
     </div>
   );

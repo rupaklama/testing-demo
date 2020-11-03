@@ -1,3 +1,4 @@
+// need to import React as we are using JSX
 import React from 'react';
 
 // Enzyme configurations
