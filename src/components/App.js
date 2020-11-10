@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1>Testing App - Jetto</h1>
-      <Congrats />
+      <Congrats success={true} />
     </div>
   )
 }
