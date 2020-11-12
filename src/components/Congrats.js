@@ -22,11 +22,12 @@ const Congrats = (props) => {
 }
 
 // giving a propTypes object to our component
+// To run typechecking on the props for a component, you can assign the special propTypes property
+// PropTypes exports a range of validators that can be used to make sure the data you receive is valid.
 Congrats.propTypes = {
 // it's going to list all of the propTypes that we expect & it's type that we want
 // here, we want prop 'success' to be boolean
-// add isRequired to get a warning error
-success: PropTypes.bool.isRequired  
+success: PropTypes.bool.isRequired // isRequired is must provide
 }
 
 export default Congrats;

@@ -30,13 +30,14 @@ import Congrats from './Congrats';
 // passing default props of an object to our component for testing
 
 // default props for all the components for DRY code
-// every component needs t have default props when doing PropsTypes Testing
+// every component needs to have default props when doing PropsTypes Testing
 const defaultProps = { success: false }
 const setup = (props={}) => { // props is an object with key/value pair
-  // pass in defaultProps
-  const setupProps = { ...defaultProps, ...props} // ...props is component props
+  // ...defaultProps - pass in defaultProps
+  // ...props is to add additional props
+  const setupProps = { ...defaultProps, ...props} //...props is to add additional props
 
-  // passing props into our component for testing 
+   // passing all combine props into our component for testing
   return shallow(<Congrats { ...setupProps}/>) 
 }
 
