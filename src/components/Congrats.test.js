@@ -12,7 +12,7 @@ import { shallow } from 'enzyme';
 import checkPropTypes from 'check-prop-types';
 
 // import test helper function
-import { findByTestAttribute, checkProps } from '../../test/testUtils';
+// import { findByTestAttribute, checkProps } from '../../test/testUtils';
 
 import Congrats from './Congrats';
 
@@ -37,56 +37,55 @@ const setup = (props={}) => { // props is an object with key/value pair
   // ...props is to add additional props
   const setupProps = { ...defaultProps, ...props} //...props is to add additional props
 
-   // passing all combine props into our component for testing
+   // passing spread props(all props) into our component for testing
   return shallow(<Congrats { ...setupProps}/>) 
 }
 
 // Test stages
 
+// we want to find one div element with this particular data-test-attribute (test class name)
+// to make sure this div element is being render
 test('renders without error', () => {
   const wrapper = setup(); // shallow wrapper component
-  const component = findByTestAttribute(wrapper, 'component-congrats')
+  const component = wrapper.find('[data-test="component-congrats"]')
   expect(component.length).toBe(1)
 });
 
 test('renders no text when `success` prop is false', () => {
-  // passing props into our component for testing
+  // passing props into our component to see if test pass 
   const wrapper = setup({ success: false })
-  const component = findByTestAttribute(wrapper, 'component-congrats')
+  const component = wrapper.find('[data-test="component-congrats"]')
 
   // text method returns a string of the rendered text of the current render tree
   // text method to extract the text of an element from our component with
   // specific to that particular data-test-attribute - 'component-congrats'
-  expect(component.text()).toBe('')
+  expect(component.text()).toBe('') 
 });
 
 test('renders congrats message when `success` prop is true', () => {
+  // passing props into our component to see if test pass 
   const wrapper = setup({ success: true })
-  const message = findByTestAttribute(wrapper, 'congrats-message')
+  const message = wrapper.find('[data-test="congrats-message"]')
   // text length to be non-zero
   // using not method of jest for that
-  expect(message.text().length).not.toBe(0) 
+  expect(message.text().length).not.toBe(0)  
 });
 
-// since we are going to check props types passed to our components, lets
-// add it on our helper function - testUtils.js 
 // propTypes checking
 test('does not throw warning with expected props', () => {
   // checking to see if there anything wrong with our prop type - { success: false}
-  // if no prop type defined, not going to find anything wrong with it
+  // passing props into our component to see if test pass 
   const expectedProps = { success: false}
   // will see what kind a error we get, if we run checkPropTypes with that prop
-  // pass .propTypes into our component & props that we want to test, 
-  // then tell it we are testing properties 'prop'
-  // then you give name of the component - Congrats.name
+  // checkPropTypes(args) are as follows
+  // 1. pass 'Congrats.propTypes' into our component & 
+  // 2. expectedProps - props that we want to test, 
+  // 3. then tell it we are testing properties 'prop'
+  // 4. then give name of our component - Congrats.name
   const propError = checkPropTypes(Congrats.propTypes, expectedProps, 'prop', Congrats.name )
 
   // since we are using checkPropTypes, we get return an error instead of warning
   // what we expect here for an error is to be 'undefined' because an error will
   // be undefined if prop passes all the test
   expect(propError).toBeUndefined(); // jest method
-
-  // running our expect statement in checkProps helper func with 
-  // our component & expectedProps in testUtils.js file
-  // checkProps(Congrats, expectedProps)
 })

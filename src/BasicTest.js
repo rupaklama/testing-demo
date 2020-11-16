@@ -4,7 +4,7 @@ import React from 'react';
 // Enzyme configurations
 import Enzyme, { shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import App from './App';
+import Basic from './Basic';
 
 // set up enzyme's react adapter
 // new instance of adapter
@@ -13,13 +13,9 @@ Enzyme.configure({ adapter: new Adapter() });
 // In TDD testing, we always want Red Test before Green Test
 // meaning we want our test to fail before they pass
 
-// if there's a common code between multiple tests in a single file,
-// we use jest's beforeEach helper func to extract that common logic
-let wrapper; // let to reassigned new values to this variable several times during test
-beforeEach(() => {
-  // any logic we put here gets executed before all the tests below
-  wrapper = shallow(<App />);
-});
+// Setup to prevent DRY if there's a common code between multiple tests in a single file
+// helper function to create shallow wrapper for our basic component
+const setup = () => shallow(<Basic />)
 
 // data-test-attribute is an attribute syntax - [type="text"])
 // which is one of the valid CSS enzyme selector to find html elements to render
@@ -38,40 +34,52 @@ beforeEach(() => {
 
 // shows button
 test('renders button', () => {
+  // calling our helper func
+  const wrapper = setup();
+
+  // we want to find one button element with this particular data-test-attribute (test class name)
+  // to make sure button element is being render
   const button = wrapper.find('[data-test="increment-button"]');
   expect(button.length).toBe(1);
 });
 
-// displays counter
+// displays counter in h1 element
 test('renders counter display', () => {
+  const wrapper = setup();
+
+  // we want to find one h1 element with this particular data-test-attribute
+  // to make sure h1 element is being render
   const counterDisplay = wrapper.find('[data-test="counter-display"]');
   expect(counterDisplay.length).toBe(1);
 });
 
-// starting value
+// display starting value in span element inside of h1 element
 test('counter starts at 0', () => {
+  const wrapper = setup();
+
   // text method returns a string of the rendered text of the current render tree
-  // text method to extract the text of an element
+  // text method to extract the text content of an element with this particular data-test-attribute
   const count = wrapper.find('[data-test="count"]').text();
   expect(count).toBe('0');
 });
 
 
-
 // find the display and see if click increments the counter display
 test('clicking on button increments counter display', () => {
-  
-  // find the button 
+  const wrapper = setup();
+
+  // first find the button to make sure it's being render
   const button = wrapper.find('[data-test="increment-button"]');
 
-  // click the button
+  // then, click the button
+
   // Simulate a 'click' event - .simulate(event,[mock]) of enzyme
   // simulate func takes first arg -  html name of the event / normal html DOM event,
   // Second arg is the mock event object that will be merged with the event object passed
   // to our event handlers - fake event object
-  button.simulate('click'); // mocking button click
+  button.simulate('click'); // mocking button click - technically we clicked the button here
 
-  // test the number has been incremented
+  // After clicking button above, testing if the number has been incremented to 1
   const count = wrapper.find('[data-test="count"]').text();
   expect(count).toBe('1')
 });
@@ -80,6 +88,8 @@ test('clicking on button increments counter display', () => {
 // first arg - String description of the test, second arg - func with test logic
 // reading this test as - test 'renders without crashing' for making meaningful description
 test('renders without error', () => {
+  const wrapper = setup();
+
   // using Shallow render method of enzyme to render only App component
   // wrapper - a shallow instance object we get from this is a wrapped version of App component
   // wrapper specifically means that this is a wrapped component that has some additional
@@ -88,7 +98,7 @@ test('renders without error', () => {
 
   // find method returns back an array which contains every elements/instances that matches
   // the selector - .find(selector)
-  // although we only care about only one element
+  // although we only care about only one element - one data-test-attribute
 
   // data-test-attribute is an attribute syntax - [type="text"]) 
   // which is one of the valid CSS enzyme selector to find html elements to render
@@ -97,8 +107,11 @@ test('renders without error', () => {
   // using data-test-attribute on the component's html elements to be more specific 
   // using data-test-attribute to easy to find html elements & to render it
   // using expect statement to throw an error, attribute syntax ([href="foo"]
-  const appComponent = wrapper.find('[data-test="component-app"]'); // attrib/value
-  expect(appComponent.length).toBe(1);
+
+  // we want to find one div element with this particular data-test-attribute (test class name)
+  // to make sure this div element is being render
+  const basicComponent = wrapper.find('[data-test="component-basic"]'); // attrib/value
+  expect(basicComponent.length).toBe(1);
 
   // debug() - Returns an HTML-like string of the wrapper for debugging purposes.
   // helpful if we are not sure what's going on with the test or tests are not passing
