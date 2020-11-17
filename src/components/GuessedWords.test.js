@@ -27,7 +27,7 @@ const setup = (props = {}) => {
   // ...props is to add additional props through props arg
   const setupProps = { ...defaultProps, ...props };
 
-  // passing all combine props into our component for testing
+  // passing spread props(all props) into our component for testing
   return shallow(<GuessedWords {...setupProps} />);
 };
 
@@ -35,8 +35,14 @@ const setup = (props = {}) => {
 
 test('does not throw warning with expected props', () => {
   // NOTE: at first, this test will automatically pass since our component has no props defined
+  // in actual GuessedWords component
 
   // will see what kind a error we get, if we run checkPropTypes with that our default props
+  // checkPropTypes(args) are as follows
+  // 1. pass 'Congrats.propTypes' into our component & 
+  // 2. expectedProps - props that we want to test, 
+  // 3. then tell it we are testing properties 'prop'
+  // 4. then give name of our component - Congrats.name
   const propError = checkPropTypes(
     GuessedWords.propTypes, // add in .propTypes into our component
     defaultProps, // our default props
@@ -74,34 +80,58 @@ describe('if there are no words guessed', () => {
   let wrapper;
   beforeEach(() => {
     // any logic we put here gets executed before all the tests below
-    // passing new default prop here to test
+    // over-riding top level default props above & passing new prop here to test
+    // for this particular describe - group of tests
     wrapper = setup({ guessedWords: [] });
   });
 
+  // if there are no words guessed, run these tests
+
   test('renders without error', () => {
+    // we want to find one div element with this particular data-test-attribute (test class name)
+    // to make sure this div element is being render
     const component = wrapper.find('[data-test="component-guessed-words"]'); // attrib/value
     expect(component.length).toBe(1);
   });
 
   test('renders instructions to guess a word', () => {
+    // we want to find one span element with this particular data-test-attribute (test class name)
+    // to make sure this span element has some text content
     const instructions = wrapper.find('[data-test="guess-instructions"]'); 
     // text length to be non-zero
     // using not method of jest for that
     expect(instructions.text().length).not.toBe(0)
+    // text method returns a string of the rendered text of the current render tree
+    // text method to extract the text of an element from our component with
+    // specific to that particular data-test-attribute - 'guess-instructions'
   });
 });
 
 describe('if there are words guessed', () => {
-  
-  test('renders without error', () => {
+  // default props for these tests 
+  const guessedWords = [
+    { guessedWord: 'train', letterMatchCount: 3 },
+    { guessedWord: 'agile', letterMatchCount: 1 },
+    { guessedWord: 'party', letterMatchCount: 5 },
+  ];
 
+  let wrapper;
+  beforeEach(() => {
+    wrapper = setup({ guessedWords: guessedWords });
+  });
+
+  test('renders without error', () => {
+    const component = wrapper.find('[data-test="component-guessed-words"]'); // attrib/value
+    expect(component.length).toBe(1);
   })
 
   test('renders "guessed words" section', () => {
-
+    const guessedWordsNode = wrapper.find('[data-test="guessed-words"]');
+    expect(guessedWordsNode.length).toBe(1); 
   })
 
   test('correct number of guessed words', () => {
-    
+    const guessedWordNodes = wrapper.find('[data-test="guessed-word"]');
+    expect(guessedWordNodes.length).toBe(guessedWords.length); 
   })
 });
