@@ -1,4 +1,4 @@
-import { correctGuess, actionTypes } from './index';
+import { correctGuess, CORRECT_GUESS } from './index';
 
 // describe func/statement is to group together similar sets of tests
 // to prevent DRY code
@@ -10,8 +10,8 @@ describe('correctGuess', () => {
     const action = correctGuess();
 
     // can't use 'toBe' when comparing mutable data types like objects & arrays
-    // we can only use 'toBe' for immutable objects like numbers & strings
-    expect(action).toEqual({ type: actionTypes.CORRECT_GUESS });
+    // we can only use 'toBe' for immutable types(primitive types) like numbers & strings 
+    expect(action).toEqual({ type: CORRECT_GUESS });
   });
 });
 
