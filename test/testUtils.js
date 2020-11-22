@@ -1,3 +1,4 @@
+
 // npm install --save-dev check-prop-types
 // To check component prop types, we will use npm library ‘check-prop-types’.
 // Instead of throwing a warning if the prop types are incorrect, it will actually return an error.
@@ -7,6 +8,24 @@ import checkPropTypes from 'check-prop-types';
 
 // global configurations for all our tests
 // helper function that we can import into all of our test files
+
+// we need to connect Redux Store inside our setup func for testing
+import { createStore } from 'redux';
+
+// NOTE: It's important to create fresh Store for each tests for testing
+// using 'storeFactory' test utility - helper func below
+
+import rootReducer from '../src/reducers';
+// we want to make sure we are using same Reducer as our actual App
+// If we add Reducer to our App, it will add it to our 'storeFactory' as well
+// When we add middleware to our store - Redux Thunk, we will share with our 'storeFactory' also
+export const storeFactory = (initialState) => { // param - to specify initial state in our test
+  // we want to create a TEST STORE for testing that matches configuration of our actual Redux Store
+  // which uses Reducers from our actual App
+  return createStore(rootReducer, initialState);
+}
+// NOTE: This 'storeFactory' helper func will be added as a PROP to our connected components
+// which allow connected components to connect to our actual redux store
 
 // data-test-attribute is an attribute syntax - [type="text"])
 // which is one of the valid CSS enzyme selector to find html elements to render

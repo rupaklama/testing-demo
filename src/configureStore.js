@@ -1,7 +1,7 @@
 // creating separate file to access Redux Store in test files
 import React from 'react';
 
-// provider component to share data
+// provider component to share data & connect to Redux Store
 import { Provider } from 'react-redux';
 
 // Using other function from Redux - createStore ()
@@ -21,9 +21,7 @@ import rootReducer from './reducers';
 // This is a React Provider component & call with props object
 // This component will wrap up other components
 
-// declare initial Global state object & customized to work with 
-// test files to add data into Store for testing from test files
-// our initial test state will be pass as prop here
+// declare initial Global state object 
 const store = ({ children, initialState = {} }) => {
 
   // Wrap the children component with the Provider component.
@@ -42,3 +40,5 @@ const store = ({ children, initialState = {} }) => {
 };
 
 export default store;
+
+
