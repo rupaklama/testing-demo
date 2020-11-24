@@ -18,6 +18,11 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 // import root reducer
 import rootReducer from './reducers';
 
+// to add multiple different middlewares here in an array
+// Also, making it Named export to use our middlewares in 
+// our Test STORE - 'storeFactory' in testUtils.js 
+export const middlewares = [thunk];
+
 // This is a React Provider component & call with props object
 // This component will wrap up other components
 
@@ -31,7 +36,7 @@ const store = ({ children, initialState = {} }) => {
       store={createStore(
         rootReducer,
         initialState,
-        composeWithDevTools(applyMiddleware(thunk))
+        composeWithDevTools(applyMiddleware(...middlewares))
       )}
     >
       {children}
