@@ -1,9 +1,13 @@
+// for test with moxios
+import axios from 'axios';
+
 // variable for action types which will give us better feedback if 
 // we mistype action types, avoiding variable undefined issues
 import { getLetterMatchCount } from '../helpers';
 
 export const CORRECT_GUESS = 'CORRECT_GUESS';
 export const GUESS_WORD = 'GUESS_WORD';
+export const SET_SECRET_WORD = 'SET_SECRET_WORD';
 
 // Type is required, payload property is optional
 // here, export in the beginning is the Named export,
@@ -35,3 +39,22 @@ export const guessWord = (guessedWord) => {
 
   };
 };
+
+// action creator to test moxios
+export const getSecretWord = () => async (dispatch) => {
+  
+  try {
+    // since we are using moxios, we will never hit this address during the test
+    const { data } = await axios.get('http://localhost:3030')
+
+    // now dispatch above data to reducer
+    dispatch({
+      type: SET_SECRET_WORD,
+      payload: data
+    })
+  } catch (error) {
+    console.log(error.message)
+  }
+
+
+}
